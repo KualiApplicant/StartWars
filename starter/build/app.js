@@ -78,20 +78,25 @@
 	    getInitialState: function getInitialState() {
 	        return {
 	            page: 1,
+	            maxPage: 1,
 	            ships: []
 	        };
 	    },
 
 	    previousPage: function previousPage() {
-	        this.setState(function (previousState, currentProps) {
-	            return { page: previousState.page - 1 };
-	        });
+	        if (this.state.page > 1) {
+	            this.setState(function (previousState, currentProps) {
+	                return { page: previousState.page - 1 };
+	            });
+	        }
 	    },
 
 	    nextPage: function nextPage() {
-	        this.setState(function (previousState, currentProps) {
-	            return { page: previousState.page + 1 };
-	        });
+	        if (this.state.page < this.state.maxPage) {
+	            this.setState(function (previousState, currentProps) {
+	                return { page: previousState.page + 1 };
+	            });
+	        }
 	    },
 
 	    componentDidMount: function componentDidMount() {
@@ -162,7 +167,8 @@
 	    },
 
 	    render: function render() {
-	        var cost = Number(this.props.ship.cost_in_credits).toLocaleString();
+	        var costValue = Number(this.props.ship.cost_in_credits);
+	        var costString = isNaN(costValue) ? "Not for Sale" : costValue.toLocaleString() + ' Credits';
 	        return _react2['default'].createElement(
 	            'div',
 	            null,
@@ -176,9 +182,8 @@
 	                        'span',
 	                        { onClick: this.openModal },
 	                        this.props.ship.name,
-	                        ', ',
-	                        cost,
-	                        ' Credits'
+	                        ': ',
+	                        costString
 	                    )
 	                )
 	            ),
@@ -195,8 +200,7 @@
 	                _react2['default'].createElement(
 	                    'div',
 	                    null,
-	                    cost,
-	                    ' Credits'
+	                    costString
 	                ),
 	                _react2['default'].createElement(
 	                    'button',
@@ -206,7 +210,6 @@
 	            )
 	        );
 	    }
-
 	});
 
 	_react2['default'].render(_react2['default'].createElement(

@@ -18,20 +18,25 @@ var ShipList = React.createClass({
     getInitialState(){
         return {
             page: 1,
+            maxPage: 1,
             ships: []
         }
     },
 
     previousPage(){
-        this.setState(function (previousState, currentProps) {
-            return {page: previousState.page - 1}
-        });
+        if(this.state.page > 1) {
+            this.setState(function (previousState, currentProps) {
+                return {page: previousState.page - 1}
+            });
+        }
     },
 
     nextPage(){
-        this.setState(function (previousState, currentProps) {
-            return {page: previousState.page + 1}
-        });
+        if(this.state.page < this.state.maxPage) {
+            this.setState(function (previousState, currentProps) {
+                return {page: previousState.page + 1}
+            });
+        }
     },
 
     componentDidMount() {
@@ -77,10 +82,11 @@ var Ship = React.createClass({
     },
 
     render() {
-        var cost = Number(this.props.ship.cost_in_credits).toLocaleString();
+        var costValue = Number(this.props.ship.cost_in_credits);
+        var costString = isNaN(costValue) ? "Not for Sale" : costValue.toLocaleString() + ' Credits';
         return <div>
             <li className="list-group-item">
-                <div><span onClick={this.openModal}>{this.props.ship.name}, {cost} Credits</span></div>
+                <div><span onClick={this.openModal}>{this.props.ship.name}: {costString}</span></div>
             </li>
             <Modal
                 isOpen={this.state.modalIsOpen}
@@ -88,7 +94,7 @@ var Ship = React.createClass({
 
                 <h2>{this.props.ship.name}</h2>
 
-                <div>{cost} Credits</div>
+                <div>{costString}</div>
                 <button onClick={this.closeModal}>close</button>
             </Modal>
         </div>
