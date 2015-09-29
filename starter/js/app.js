@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'underscore';
-import http from 'http';
+import axios from 'axios';
 
 //The main section of the app
 const StartWars = React.createClass({
@@ -21,23 +21,20 @@ var ShipList = React.createClass({
 
     componentDidMount() {
         var self = this;
-        //Somehow call out to the api and grab the ships.
-        $.ajax(this.props.source).done(function(result){
-                self.setState({
-                    ships: result["results"]
-                });
-                self.render();
-        });
+        self.ships = [];
+        return axios
+            .get(this.props.source + 'starships/')
+            .then(response => self.setState({ships:response.data.results}))
     },
 
     renderShips() {
-        return _.map(this.props.ships, function(ship) {
+        return _.map(this.state.ships, function(ship) {
                     return <Ship ship={ship} />;
                 });
     },
 
     render(){
-        return <div><h1>{this.props.ships.length} Ships</h1><ul className="list-group">
+        return <div><h1>{this.props.ships} Ships</h1><ul className="list-group">
             {this.renderShips()}
         </ul></div>;
     }
@@ -50,5 +47,5 @@ var Ship = React.createClass({
     }
 });
 
-React.render(<div><div>Testing</div><StartWars source="http://swapi.co/api/starships/"/></div>,
+React.render(<div><div>Testing</div><StartWars source="http://swapi.co/api/"/></div>,
     document.querySelector('.app'))
