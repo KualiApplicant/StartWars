@@ -29,7 +29,7 @@ var ShipList = React.createClass({
 
     renderShips() {
         return _.map(this.state.ships, function(ship) {
-                    return <Ship ship={ship} />;
+                    return <Ship key={ship.url} ship={ship} />;
                 });
     },
 
@@ -43,7 +43,8 @@ var ShipList = React.createClass({
 //A ship
 var Ship = React.createClass({
     render() {
-        return <li className="list-group-item">{this.props.ship.name}</li>;
+        var cost = Number(this.props.ship.cost_in_credits).toLocaleString();
+        return <li className="list-group-item"><div>{this.props.ship.name}, {cost} Credits</div></li>;
     }
 });
 

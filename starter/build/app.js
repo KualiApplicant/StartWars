@@ -89,7 +89,7 @@
 
 	    renderShips: function renderShips() {
 	        return _underscore2['default'].map(this.state.ships, function (ship) {
-	            return _react2['default'].createElement(Ship, { ship: ship });
+	            return _react2['default'].createElement(Ship, { key: ship.url, ship: ship });
 	        });
 	    },
 
@@ -117,10 +117,18 @@
 	    displayName: 'Ship',
 
 	    render: function render() {
+	        var cost = Number(this.props.ship.cost_in_credits).toLocaleString();
 	        return _react2['default'].createElement(
 	            'li',
 	            { className: 'list-group-item' },
-	            this.props.ship.name
+	            _react2['default'].createElement(
+	                'div',
+	                null,
+	                this.props.ship.name,
+	                ', ',
+	                cost,
+	                ' Credits'
+	            )
 	        );
 	    }
 	});
